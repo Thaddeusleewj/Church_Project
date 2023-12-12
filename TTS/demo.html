@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TTS Demonstration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./js/main.js"></script>
+    <script src="./elevenlabs/main.js"></script>
+    <script src="./openai/main.js"></script>
+  </head>
+  <body>
+    <div
+      class="mx-auto min-w-[300px] max-w-[700px] my-8 p-3 flex gap-5 flex-col"
+    >
+      <div>
+        <label
+          for="tts"
+          class="block text-sm font-medium leading-6 text-gray-900"
+          >TTS Text</label
+        >
+        <div class="mt-2">
+          <textarea
+            rows="12"
+            name="tts"
+            id="tts"
+            class="resize-none block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+          ></textarea>
+        </div>
+      </div>
+      <div class="flex gap-5 justify-around items-center">
+        <button
+          type="button"
+          id="JS"
+          class="btn rounded-full bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        >
+          Web Speech JS
+        </button>
+        <button
+          type="button"
+          id="ElevenLabs"
+          class="btn rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+        >
+          ElevenLabs
+        </button>
+        <button
+          type="button"
+          id="OpenAI"
+          class="btn rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          OpenAI Azure
+        </button>
+        <button
+          type="button"
+          id="STOP"
+          class="btn rounded-full bg-orange-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+        >
+          STOP
+        </button>
+      </div>
+      <div class="hidden" id="audioDiv"></div>
+    </div>
+    <script>
+      document.getElementById(
+        "tts"
+      ).value = `Anne grew up in poverty and pain. Two of her siblings died in infancy. At five, an eye disease left her partially blind and unable to read or write. When Anne was eight, her mother died from tuberculosis. Shortly after, her abusive father abandoned his three surviving children. The youngest was sent to live with relatives, but Anne and her brother, Jimmie, went to Tewksbury Almshouse, a dilapidated, overcrowded poorhouse. A few months later, Jimmie died.
+
+      At age fourteen, Anne’s circumstances brightened. She was sent to a school for the blind, where she underwent surgery to improve her vision and learned to read and write. Though she struggled to fit in, she excelled academically and graduated valedictorian. Today we know her best as Anne Sullivan, Helen Keller’s teacher and companion. Through effort, patience, and love, Anne taught blind and deaf Helen to speak, to read Braille, and to graduate from college.
+
+      Joseph too had to overcome extreme trials: at seventeen, he was sold into slavery by his jealous brothers and was later wrongly imprisoned (Genesis 37; 39–41). Yet God used him to save Egypt and his family from famine (50:20).
+
+      We all face trials and troubles. But just as God helped Joseph and Anne to overcome and to deeply impact the lives of others, He can help and use us. Seek Him for help and guidance. He sees and hears.
+      `;
+
+      let btnList = document.querySelectorAll(".btn");
+      for (let btn of btnList) {
+        btn.addEventListener("click", (e) => {
+          let text = document.getElementById("tts").value;
+          removeAudio();
+          switch (e.target.id) {
+            case "JS":
+              jsSpeech(text);
+              break;
+            case "ElevenLabs":
+              elevenLabsSpeech(text);
+              break;
+            case "OpenAI":
+              openAISpeech(text);
+              break;
+            default:
+              removeAudio();
+          }
+        });
+      }
+
+      function removeAudio() {
+        window.speechSynthesis.cancel();
+        document.getElementById("audioDiv").innerHTML = "";
+      }
+    </script>
+  </body>
+</html>
